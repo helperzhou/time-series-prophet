@@ -1,19 +1,16 @@
 # Core dependencies
-numpy==1.26.4
-pandas==2.2.3
-scikit-learn==1.3.0
-matplotlib==3.10.0
-seaborn==0.13.2
-plotly==6.0.0
+numpy
+pandas
+scikit-learn
+matplotlib
+seaborn
+plotly
 
 # Streamlit
-streamlit==1.41.1
+streamlit
 
-# Prophet Dependencies (Fixes Installation Issues)
-cython==3.0.11
-pystan==2.19.1.1  # Required for Prophet
-prophet==1.1.6
+prophet
 
 # Web Requests
-requests==2.32.3
-urllib3==2.3.0
+requests
+urllib3
