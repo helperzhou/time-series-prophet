@@ -1,4 +1,4 @@
-# Core Libraries
+# Core dependencies
 numpy==1.26.4
 pandas==2.2.3
 scikit-learn==1.3.0
@@ -6,16 +6,13 @@ matplotlib==3.10.0
 seaborn==0.13.2
 plotly==6.0.0
 
-# Streamlit Framework
+# Streamlit
 streamlit==1.41.1
 
-# Time Series Forecasting
-prophet==1.1.6
+# Prophet Dependencies (Fixes Installation Issues)
+cython==3.0.11
 pystan==2.19.1.1  # Required for Prophet
-
-# Machine Learning & AI
-tensorflow==2.18.0  # Remove if not using deep learning
-torch==2.4.1        # Remove if not using PyTorch
+prophet==1.1.6
 
 # Web Requests
 requests==2.32.3
