@@ -53,7 +53,7 @@ options = option_menu(
 if options == 'Visualisations':
 
     # --- Chart Selection ---
-    st.write("### 📈 Select Chart to Display")
+    st.write("### 📊 Select Chart to Display")
     chart_option = st.selectbox(
         "Choose a Chart Type",
         [
@@ -61,6 +61,7 @@ if options == 'Visualisations':
             "Trend Analysis", "Top Suppliers", "Pareto Chart"
         ]
     )
+
     # Convert Date column to datetime
     df["Date"] = pd.to_datetime(df["Date"], errors="coerce")
 
@@ -70,6 +71,9 @@ if options == 'Visualisations':
 
     # Drop NaN values for relevant charts
     df = df.dropna(subset=["Zimasa VAT Inclusive"])
+
+    # Remove "Total" entries from Supplier column
+    df = df[df["Supplier"].str.lower() != "total"]
 
     # === TIME SERIES ANALYSIS (Line Chart) ===
     if chart_option == "VAT Overtime":
@@ -120,7 +124,7 @@ if options == 'Visualisations':
 
         trend_chart_config = {
             "chart": {"type": "column"},
-            "title": {"text": "VAT Breakdown Over Time (100% Stacked)"},
+            "title": {"text": "VAT Breakdown Over Time"},
             "xAxis": {"categories": trend_data["Date"].astype(str).tolist()},
             "yAxis": {"title": {"text": "Percentage"}},
             "plotOptions": {"column": {"stacking": "percent"}},
@@ -132,29 +136,24 @@ if options == 'Visualisations':
         }
         sh.streamlit_highcharts(trend_chart_config)
 
-    # === TOP SUPPLIERS (Treemap) ===
+    # === TOP SUPPLIERS (Bar Chart) ===
     elif chart_option == "Top Suppliers":
         supplier_spending = df.groupby("Supplier")["Zimasa VAT Inclusive"].sum().reset_index()
         supplier_spending = supplier_spending.sort_values("Zimasa VAT Inclusive", ascending=False).head(10)
 
-        treemap_chart_config = {
-            "chart": {"type": "treemap"},
+        bar_chart_config = {
+            "chart": {"type": "bar"},
             "title": {"text": "Top 10 Suppliers by Spending"},
-            "series": [
-                {
-                    "type": "treemap",
-                    "layoutAlgorithm": "squarified",
-                    "data": [{"name": row["Supplier"], "value": row["Zimasa VAT Inclusive"]} for _, row in
-                             supplier_spending.iterrows()],
-                }
-            ],
+            "xAxis": {"categories": supplier_spending["Supplier"].tolist()},
+            "yAxis": {"title": {"text": "Spending (ZAR)"}},
+            "series": [{"name": "Spending", "data": supplier_spending["Zimasa VAT Inclusive"].tolist()}],
         }
-        sh.streamlit_highcharts(treemap_chart_config)
+        sh.streamlit_highcharts(bar_chart_config)
 
     # === PARETO CHART (Bar + Line Combination) ===
     elif chart_option == "Pareto Chart":
         supplier_spending = df.groupby("Supplier")["Zimasa VAT Inclusive"].sum().reset_index()
-        supplier_spending = supplier_spending.sort_values("Zimasa VAT Inclusive", ascending=False).head(10)
+        supplier_spending = supplier_spending.sort_values("Zimasa VAT Inclusive", ascending=False).head(15)
 
         supplier_spending["Cumulative %"] = supplier_spending["Zimasa VAT Inclusive"].cumsum() / supplier_spending[
             "Zimasa VAT Inclusive"].sum() * 100
@@ -173,7 +172,6 @@ if options == 'Visualisations':
             ],
         }
         sh.streamlit_highcharts(pareto_chart_config)
-
 elif options == 'Forecasting':
     # Filter suppliers that appear 2 or more times
     supplier_counts = df["Supplier"].value_counts()
