@@ -8,6 +8,8 @@ plotly
 
 # Streamlit
 streamlit
+streamlit-option-menu
+streamlit-highcharts
 
 prophet
 
