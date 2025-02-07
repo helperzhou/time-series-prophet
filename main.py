@@ -159,7 +159,7 @@ if options == 'Visualisations':
             "Zimasa VAT Inclusive"].sum() * 100
 
         pareto_chart_config = {
-            "title": {"text": "Pareto Chart of Top 10 Suppliers"},
+            "title": {"text": "Pareto Chart of Top 15 Suppliers"},
             "xAxis": {"categories": supplier_spending["Supplier"].tolist()},
             "yAxis": [
                 {"title": {"text": "Spending (ZAR)"}, "opposite": False},
